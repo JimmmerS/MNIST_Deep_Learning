@@ -2,6 +2,8 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -21,10 +23,20 @@ public class Runner extends Application{
             }
         });
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        MNIST mnist = new MNIST();
+        Image example = mnist.getExampleImage();
 
-        Scene scene = new Scene(root, 300, 250);
+        Canvas canvas = new Canvas(200, 200);
+        canvas.setWidth(200);
+        canvas.setHeight(200);
+        // Get the graphics context of the canvas
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.drawImage(example, 0, 0, 200, 200);
+
+        StackPane root = new StackPane();
+        root.getChildren().add(canvas);
+
+        Scene scene = new Scene(root, 200, 200);
 
         primaryStage.getIcons().add(new Image("deep_learning_icon.png"));
 
