@@ -1,6 +1,9 @@
 /*
     This class will connect to the MNIST database and pull in new images
  */
+
+import org.python.modules.cPickle;
+
 public class MNIST {
 
     private static final int TRAINING_SIZE = 50000;
