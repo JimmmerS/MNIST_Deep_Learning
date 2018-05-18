@@ -3,6 +3,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -11,7 +12,7 @@ public class Runner extends Application{
     @Override
     public void start(Stage primaryStage){
 
-        Button btn = new Button("Start");
+        Button btn = new Button("Learn Deeply");
 
         btn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
@@ -24,6 +25,8 @@ public class Runner extends Application{
         root.getChildren().add(btn);
 
         Scene scene = new Scene(root, 300, 250);
+
+        primaryStage.getIcons().add(new Image("deep_learning_icon.png"));
 
         primaryStage.setTitle("MNIST Deep Learning");
         primaryStage.setScene(scene);
