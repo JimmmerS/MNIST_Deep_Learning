@@ -5,12 +5,14 @@
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.zip.GZIPInputStream;
+
 
 public class MNIST {
 
@@ -28,6 +30,7 @@ public class MNIST {
     private NumberImage[] testImages;
 
     private Image exampleImage;
+    private int exampleCounter = 0;
 
     public MNIST (){
         trainingImages = new NumberImage[TRAINING_SIZE];
@@ -53,18 +56,25 @@ public class MNIST {
             testLabelStream.readInt();
 
             // Get rid of extra info we don't need for an image file (We will change this)
-            trainImageStream.readInt(); // Number of Images
+            int numImages = trainImageStream.readInt(); // Number of Images
             int rows = trainImageStream.readInt(); // Number of rows
             int cols = trainImageStream.readInt(); // Number of cols
 
-            byte[] singleImage = new byte[rows * cols];
-            for(int i = 0; i < rows * cols; i++){
-                singleImage[i] = trainImageStream.readByte();
+            System.out.println("NUM IMAGES: " + numImages);
+            System.out.println("ROWS: " + rows);
+            System.out.println("COLS: " + cols);
+
+            // Go through all the images we see
+            for(int j = 0; j < numImages; j++) {
+                byte[] rawImage = new byte[rows * cols];
+                for (int i = 0; i < rows * cols; i++) {
+                    rawImage[i] = trainImageStream.readByte();
+                }
+
+                // Create a new NumberImage object from this chunk of data
+                trainingImages[j] = new NumberImage(rows, cols, rawImage);
+                //exampleImage = new Image(new ByteArrayInputStream(rawImage));
             }
-
-
-            exampleImage = new Image(new ByteArrayInputStream(singleImage));
-
 
         } catch (IOException e) {
             System.out.println("Data file couldn't be read");
@@ -72,22 +82,68 @@ public class MNIST {
         }
     }
 
-    public Image getExampleImage() { return exampleImage; }
+    public Image getExampleImage() {
+        return trainingImages[exampleCounter++].getImage();
+    }
 
     class NumberImage {
+        private int rows;
+        private int cols;
+
         private int value;
 
         // Each value is between 0x00 and 0xFF
-        private byte[][] data;
+        private int[][] data;
+        private byte[][] rawData;
 
-        public NumberImage (){
-            data = new byte[255][255];
+        public NumberImage (int rows, int cols, byte[] raw){
+            this.rows = rows;
+            this.cols = cols;
+            this.rawData = new byte[rows][cols];
+
+            data = new int[rows][cols];
+
+            // Set this with the labels
             value = 0;
 
-            // Read in the MNIST data
+            // Convert the MNIST data to the unsigned byte val stored in an int
+            for(int row = 0; row < rows; row++){
+                for(int col = 0; col < cols; col++){
+                    data[row][col] = raw[row * cols + col] & 0xFF;
+                    rawData[row][col] = raw[row * cols + col];
+                }
+            }
+        }
+
+        // Return the visual representation of the data
+        public WritableImage getImage(){
+            WritableImage image = new WritableImage(cols, rows);
+            PixelWriter pixelWriter = image.getPixelWriter();
+            int grayScaleConv = 0xFF000000;
+            for(int row = 0; row < rows; row++){
+                for(int col = 0; col < cols; col++){
+                    pixelWriter.setArgb(col, row, UByteToARGB(rawData[row][col]));
+                }
+            }
+
+            return image;
+        }
+
+        public int UByteToARGB(byte ubyte){
+            // Alpha value of 255
+            int result = 0xFF000000;
+
+            // Set R,G,B to the same input value
+            result += (0xFF - (ubyte & 0xFF));
+            result += (0xFF - (ubyte & 0xFF)) << 8;
+            result += (0xFF - (ubyte & 0xFF)) << 16;
+
+            return result;
         }
 
         public int getValue(){ return value; }
-        public byte[][] getData() { return data; }
+        public int[][] getData() { return data; }
+
+        public void setValue(int value) { this.value = value; }
     }
 }
