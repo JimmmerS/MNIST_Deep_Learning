@@ -60,6 +60,8 @@ public class MNIST {
             int rows = trainImageStream.readInt(); // Number of rows
             int cols = trainImageStream.readInt(); // Number of cols
 
+            trainLabelStream.readInt(); // Number of items
+
             System.out.println("NUM IMAGES: " + numImages);
             System.out.println("ROWS: " + rows);
             System.out.println("COLS: " + cols);
@@ -73,7 +75,7 @@ public class MNIST {
 
                 // Create a new NumberImage object from this chunk of data
                 trainingImages[j] = new NumberImage(rows, cols, rawImage);
-                //exampleImage = new Image(new ByteArrayInputStream(rawImage));
+                trainingImages[j].value = (trainLabelStream.readByte() & 0xFF);
             }
 
         } catch (IOException e) {
@@ -83,8 +85,12 @@ public class MNIST {
     }
 
     public Image getExampleImage() {
-        return trainingImages[exampleCounter++].getImage();
+        return trainingImages[exampleCounter].getImage();
     }
+    public int getValue() {
+        return trainingImages[exampleCounter++].value;
+    }
+
 
     class NumberImage {
         private int rows;

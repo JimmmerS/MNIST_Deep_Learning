@@ -50,6 +50,8 @@ public class Runner extends Application{
                 System.out.println("Lots of deep learning going on...");
                 Image ex = mnist.getExampleImage();
 
+                btn.setText("" + mnist.getValue());
+
                 GraphicsContext gc = canvas.getGraphicsContext2D();
                 gc.drawImage(ex, 0, 0, 200, 200);
             }
