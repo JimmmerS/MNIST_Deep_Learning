@@ -1,3 +1,5 @@
+
+import java.util.Random;
 public class NeuralNetwork {
 
     // Each layer has a 2d array of weights connecting this layer's nodes to the next
@@ -18,6 +20,8 @@ public class NeuralNetwork {
     // a randomized neural network
     public NeuralNetwork(int[] layerSizes){
 
+        Random random = new Random();
+
         if(layerSizes.length < 2){
             System.out.println("Insufficient node layers");
             System.exit(1);
@@ -27,10 +31,10 @@ public class NeuralNetwork {
         inputSize = layerSizes[0];
         outputSize = layerSizes[numLayers - 1];
 
-        numConnections = 0;
+        /*numConnections = 0;
         for(int i = 0; i < numLayers - 1; i++){
             numConnections += layerSizes[i] * layerSizes[i + 1];
-        }
+        }*/
 
         weights = new double[numLayers][][];
         biases = new double[numLayers][];
@@ -46,12 +50,21 @@ public class NeuralNetwork {
         // to each node in the following layer.
         for(int layer = 0; layer < numLayers - 1; layer++){
             weights[layer] = new double[layerSizes[layer]][layerSizes[layer + 1]];
+
+            // Populate this 2d layer mapping with random values
+            for(int x = 0; x < layerSizes[layer]; x++){
+                for(int y = 0; y < layerSizes[layer + 1]; y++){
+                    weights[layer][x][y] = random.nextGaussian();
+                }
+            }
         }
 
         // The first layer is input, so we don't set biases for it
         for(int i = 1; i < numLayers; i++){
             biases[i] = new double[layerSizes[i]];
+            for(int x = 0; x < layerSizes[i]; x++){
+                biases[i][x] = random.nextGaussian();
+            }
         }
-
     }
 }
