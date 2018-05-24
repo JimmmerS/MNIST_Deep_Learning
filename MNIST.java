@@ -147,6 +147,13 @@ public class MNIST {
             return result;
         }
 
+        public double[] unitVectorValue() {
+            double[] unitVector = new double[10];
+            unitVector[value] = 1;
+
+            return unitVector;
+        }
+
         public int getValue(){ return value; }
         public int[][] getData() { return data; }
 
