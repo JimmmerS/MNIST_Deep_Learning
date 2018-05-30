@@ -21,10 +21,10 @@ public class MNIST {
     private static final int VALIDATION_SIZE = 10000;
     private static final int TEST_SIZE = 10000;
 
-    private static final String train_images_file = "src/train-images-ubyte.gz";
-    private static final String train_labels_file = "src/train-labels-ubyte.gz";
-    private static final String test_images_file = "src/test-images-ubyte.gz";
-    private static final String test_labels_file = "src/test-labels-ubyte.gz";
+    private static final String train_images_file = "src/data/train-images-ubyte.gz";
+    private static final String train_labels_file = "src/data/train-labels-ubyte.gz";
+    private static final String test_images_file = "src/data/test-images-ubyte.gz";
+    private static final String test_labels_file = "src/data/test-labels-ubyte.gz";
 
     private NumberImage[] trainingImages;
     private NumberImage[] testImages;

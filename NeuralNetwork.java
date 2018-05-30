@@ -1,5 +1,7 @@
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class NeuralNetwork {
 
     // Each layer has a 2d array of weights connecting this layer's nodes to the next
@@ -78,6 +80,29 @@ public class NeuralNetwork {
         return currLayerVals;
     }
 
+    public double[] StochGradDesc(double[] trainingData, double[] testData, int epochs, int batchSize, int eta){
+        if(testData != null){
+
+        }
+
+        // Truncate the input data if it doesn't fit perfectly
+        int totalBatches = trainingData.length / batchSize;
+        double[][] miniBatches = new double[totalBatches][batchSize];
+
+        for(int i = 0; i < epochs; i++){
+            shuffleArray(trainingData);
+
+            // Populate the shuffled minibatch data
+            for(int batchNum = 0; batchNum < totalBatches; batchNum++){
+                for(int j = 0; j < batchSize; j++){
+                    miniBatches[batchNum][j] = trainingData[batchNum * batchSize + j];
+                }
+            }
+        }
+
+        return null;
+    }
+
     // This only works if the dimensions line up
     public double[] dot(double[][] weights, double[] input){
         double[] output = new double[input.length];
@@ -103,14 +128,35 @@ public class NeuralNetwork {
         return output;
     }
 
+    /*
+    TODO: It might be useful to reuse the input array
+
+    TODO: Here is a link for a more efficient approach to sigmoid, a possible improvement
+
+    https://stackoverflow.com/questions/2887815/speeding-up-math-calculations-in-java?
+    utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+     */
     public static double[] sigmoid(double[] input){
         double[] scaledOutput = new double[input.length];
 
         // Squeeze each value into [0, 1]
         for(int i = 0; i < input.length; i++){
-            scaledOutput[i] =
+            scaledOutput[i] = (1.0 / (1.0 + Math.exp(-input[i])));
         }
-
         return scaledOutput;
     }
+
+    // Shuffle the input array in place
+    public static void shuffleArray(double[] ar){
+        // If running on Java 6 or older, use `new Random()` on RHS here
+        Random random = ThreadLocalRandom.current();
+        for (int i = ar.length - 1; i > 0; i--){
+            int index = random.nextInt(i + 1);
+            // Simple swap
+            double a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
+    }
+
 }

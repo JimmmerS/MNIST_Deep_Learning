@@ -1,4 +1,4 @@
 package test
 
-class NeuralNetworkTest extends groovy.util.GroovyTestCase {
+class NeuralNetworkTest { // extends groovy.util.GroovyTestCase {
 }
