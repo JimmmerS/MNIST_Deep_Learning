@@ -81,9 +81,17 @@ public class NeuralNetwork {
     // This only works if the dimensions line up
     public double[] dot(double[][] weights, double[] input){
         double[] output = new double[input.length];
+        int tmp;
 
         // Fill the resulting matrix
+        for(int row = 0; row < 2; row++){
 
+            tmp = 0;
+            for(int col = 0; col < input.length; col++){
+                tmp += weights[row][col] * input[col];
+            }
+            output[row] = tmp;
+        }
         return output;
     }
 
@@ -95,10 +103,13 @@ public class NeuralNetwork {
         return output;
     }
 
-    public double[] sigmoid(double[] input){
+    public static double[] sigmoid(double[] input){
         double[] scaledOutput = new double[input.length];
 
         // Squeeze each value into [0, 1]
+        for(int i = 0; i < input.length; i++){
+            scaledOutput[i] =
+        }
 
         return scaledOutput;
     }
