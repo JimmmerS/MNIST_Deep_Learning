@@ -14,8 +14,6 @@ public class NeuralNetwork {
     private int inputSize;
     private int outputSize;
 
-    int numConnections;
-
     // This is a universal constructor for use with later networks
 
     // Given an array where each element is the layer size, construct
@@ -80,23 +78,36 @@ public class NeuralNetwork {
         return currLayerVals;
     }
 
-    public double[] StochGradDesc(double[] trainingData, double[] testData, int epochs, int batchSize, int eta){
-        if(testData != null){
+    public double[] StochGradDesc(NumberImage[] trainingData, double[] testData, int epochs, int batchSize, int eta){
 
+        int numTests = 0;
+        if(testData != null){
+            numTests = testData.length;
         }
 
         // Truncate the input data if it doesn't fit perfectly
         int totalBatches = trainingData.length / batchSize;
-        double[][] miniBatches = new double[totalBatches][batchSize];
+        NumberImage[][] miniBatchData = new NumberImage[totalBatches][batchSize];
 
         for(int i = 0; i < epochs; i++){
-            shuffleArray(trainingData);
+            // TODO: Write a function that can shuffle the training data
+            //shuffleArray(trainingData);
 
             // Populate the shuffled minibatch data
             for(int batchNum = 0; batchNum < totalBatches; batchNum++){
                 for(int j = 0; j < batchSize; j++){
-                    miniBatches[batchNum][j] = trainingData[batchNum * batchSize + j];
+                    miniBatchData[batchNum][j] = new NumberImage(trainingData[batchNum * batchSize + j]);
                 }
+            }
+
+            for(int batchNum = 0; batchNum < miniBatchData.length; batchNum++){
+                Run_Mini_Batch(miniBatchData[batchNum], eta);
+            }
+
+            if(testData != null){
+
+            }else{
+
             }
         }
 
@@ -126,6 +137,32 @@ public class NeuralNetwork {
             output[i] = input[i] + bias[i];
         }
         return output;
+    }
+
+    public void Run_Mini_Batch(NumberImage[] batchData, int eta){
+        //nabla_b = [np.zeros(b.shape) for b in self.biases]
+        //nabla_w = [np.zeros(w.shape) for w in self.weights
+
+        double[][] updatedBiases = new double [biases.length][];
+        double[][][] updatedWeights = new double [weights.length][][];
+
+        for(int i = 0; i < biases.length; i++){
+            updatedBiases[i] = new double[biases[i].length];
+        }
+
+        for(int i = 0; i < weights.length; i++){
+            updatedWeights[i] = new double[weights[i].length][weights[i][0].length];
+        }
+
+        for(int batchNum = 0; batchNum < batchData.length; batchNum++){
+
+        }
+
+    }
+
+    public double[][] backprop(NumberImage numberImage){
+        double[][] biasWeightDeltas = new double[1][];
+        return null;
     }
 
     /*
