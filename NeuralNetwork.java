@@ -154,14 +154,16 @@ public class NeuralNetwork {
             updatedWeights[i] = new double[weights[i].length][weights[i][0].length];
         }
 
+        // Add the backprop averages from all runs
         for(int batchNum = 0; batchNum < batchData.length; batchNum++){
-
+            for(int i = 0; i < weights)
         }
 
     }
 
-    public double[][] backprop(NumberImage numberImage){
-        double[][] biasWeightDeltas = new double[1][];
+    public double[][] backprop(NumberImage numberImage, double[][] biases, double [][][] weights){
+
+
         return null;
     }
 
